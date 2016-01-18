@@ -1,0 +1,50 @@
+<DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="mapReduce.js"></script>
+  <head>
+  <body>
+    <input id='in' />
+    <input type="number" id="class" min="5" max="15" value="5">
+    <table id="t" class="table table-bordered text-center">
+      <thead>
+        <tr>
+          <th>Clases</th>
+          <th>Frecuencia</th>
+          <th>Valores</th>
+        <tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+    <script>
+      var tbody = document.querySelector('#t tbody');
+      var input = document.querySelector('#in');
+      var c = document.querySelector("#class");
+      var createTable = function(objs){
+        var s = "";
+        for(var i in objs){
+          var o = objs[i];
+          s += "<tr><td>" + o.range + "</td><td>" + o.count + "</td><td>"+ o.vals.toString().replace(/,/g,', ') +"</td></tr>";
+        }
+        tbody.innerHTML = s;
+      };
+      var calculateAndDisplay = function(){
+        var val = input.value;
+        var C = parseInt(c.value);
+        var res = getFrecuencia(val, C);
+        createTable(res);
+      };
+      input.onchange = function(e){
+        //if(e.keyCode == 13){
+          calculateAndDisplay();
+        //}
+      };
+      c.onchange = function(){
+        calculateAndDisplay();
+      };
+    </script>
+  </body>
+</html>
