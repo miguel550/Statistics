@@ -33,7 +33,7 @@ var getFrecuencia = function(str, nC){
 	var min = arr.sort(function(a, b){ return a - b; })[0];
 	var max = arr.sort(function(a, b){ return b - a; })[0];
 	var r = max - min;
-	var C = r / nC;
+	var C = Math.round(r / nC);
 
 	var map = function(val, emit){
 		for(var i = min, ii = 1; i <= max;i += C, ii++){

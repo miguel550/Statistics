@@ -3,6 +3,7 @@
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <script src="mapReduce.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
   <head>
   <body>
     <input id='in' />
@@ -19,17 +20,55 @@
 
       </tbody>
     </table>
+    <canvas id="myChart" width="400" height="400"></canvas>
+    <canvas id="myChartP" width="400" height="400"></canvas>
     <script>
       var tbody = document.querySelector('#t tbody');
       var input = document.querySelector('#in');
       var c = document.querySelector("#class");
       var createTable = function(objs){
+        var dataH = {
+          labels: [],
+          datasets: [
+              {
+                  label: "Frecuencia",
+                  fillColor: "rgba(220,220,220,0.5)",
+                  strokeColor: "rgba(220,220,220,0.8)",
+                  highlightFill: "rgba(220,220,220,0.75)",
+                  highlightStroke: "rgba(220,220,220,1)",
+                  data: []
+              }
+          ]
+        };
+        var dataP = {
+          labels: [],
+          datasets: [
+              {
+                  label: "Frecuecia",
+                  fillColor: "rgba(220,220,220,0.2)",
+                  strokeColor: "rgba(220,220,220,1)",
+                  pointColor: "rgba(220,220,220,1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(220,220,220,1)",
+                  data: []
+              }
+          ]
+      };
+
         var s = "";
         for(var i in objs){
-          var o = objs[i];
+          var o = objs[objs.length - i - 1];
+          dataH.labels.push(o.range);
+          dataH.datasets[0].data.push(o.count);
+          dataP.labels.push(o.range);
+          dataP.datasets[0].data.push(o.count);
           s += "<tr><td>" + o.range + "</td><td>" + o.count + "</td><td>"+ o.vals.toString().replace(/,/g,', ') +"</td></tr>";
         }
         tbody.innerHTML = s;
+
+        createHistogram('myChart', dataH, {barDatasetSpacing: 0});
+        createP('myChartP', dataP);
       };
       var calculateAndDisplay = function(){
         var val = input.value;
@@ -44,6 +83,25 @@
       };
       c.onchange = function(){
         calculateAndDisplay();
+      };
+
+      var createHistogram = function(canvaId, data, options){
+        var ctx = document.getElementById(canvaId).getContext("2d");
+        if(options)
+          var myNewChart = new Chart(ctx).Bar(data, options);
+        else {
+          var myNewChart = new Chart(ctx).Bar(data);
+        }
+
+      };
+      var createP = function(canvaId, data, options){
+        var ctx = document.getElementById(canvaId).getContext("2d");
+        if(options)
+          var myNewChart = new Chart(ctx).Line(data, options);
+        else {
+          var myNewChart = new Chart(ctx).Line(data);
+        }
+
       };
     </script>
   </body>
